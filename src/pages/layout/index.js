@@ -1,41 +1,21 @@
 import { FileOutlined, PieChartOutlined, UserOutlined, DesktopOutlined, TeamOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button } from 'antd';
 import { useState } from 'react';
+import menuList from '@/router/menuConfig';
+import InnerContent from './InnerContent'
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content, Sider } = Layout;
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />, [
-    getItem('aaa', '3'),
-    getItem('bbb', '4'),
-    getItem('ccc', '5'),
-  ]),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '6'),
-    getItem('Bill', '7'),
-    getItem('Alex', '8'),
-  ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />, [
-    getItem('aaa', '10'),
-    getItem('bbb', '11'),
-    getItem('ccc', '12'),
-    getItem('ddd', '13'),
-  ]),
-];
+
 const Index = () => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const handleChangeMenu = ({ key }) => {
+    navigate(key)
+  }
   return (
     <Layout
       style={{
@@ -44,7 +24,7 @@ const Index = () => {
     >
       <Sider collapsible collapsed={collapsed} trigger={null}>
         <div className="demo-logo-vertical" />
-        <Menu defaultSelectedKeys={['1']} mode="inline" items={items} style={{ overflowY: 'auto', height: '100vh' }} />
+        <Menu onClick={handleChangeMenu} defaultSelectedKeys={['/home']} mode="inline" items={menuList} style={{ overflowY: 'auto', height: '100vh' }} />
       </Sider>
       <Layout>
         <Header
@@ -81,7 +61,7 @@ const Index = () => {
               background: colorBgContainer,
             }}
           >
-            内容区...
+            <InnerContent />
           </div>
         </Content>
       </Layout>

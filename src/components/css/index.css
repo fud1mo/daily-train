@@ -1,0 +1,116 @@
+* {
+  box-sizing: border-box;
+}
+.gantt-modal .ant-modal-body {
+  padding: 20px 10px;
+  position: relative;
+  padding-bottom: 30px;
+}
+.gantt-modal .ant-modal-body .mb10 {
+  margin-bottom: 10px;
+}
+.gantt-modal .ant-modal-body .back-today {
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 8px;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper {
+  border: 1px solid #d9d9d9;
+  border-bottom: none;
+  border-radius: 4px;
+  display: flex;
+  padding-left: 0;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-header-wrapper {
+  display: flex;
+  border-bottom: 1px solid #d9d9d9;
+  background-color: #f0f0f0;
+  height: 60px;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-header-wrapper > div {
+  padding: 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-content {
+  display: flex;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-content > div {
+  padding: 16px 0;
+  font-size: 12px;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-header-1,
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-1 {
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-header-2,
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-2 {
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-header-3,
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-3 {
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #d9d9d9;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-1,
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-2,
+.gantt-modal .ant-modal-body .gantt-wrapper .stone-item-3 {
+  border-bottom: 1px solid #d9d9d9;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right {
+  border-bottom: 1px solid #d9d9d9;
+  position: relative;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .line {
+  position: absolute;
+  width: 1px;
+  background-color: #3c75f5;
+  top: 60px;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .line .today-date {
+  position: absolute;
+  color: #3c75f5;
+  width: 130px;
+  left: 4px;
+  font-size: 12px;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .top {
+  font-size: 12px;
+  font-weight: 600;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .top > ul {
+  display: flex;
+  flex-wrap: nowrap;
+  width: fit-content;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .top .ul-ym,
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .top .ul-week {
+  padding: 5px 0;
+  text-align: center;
+  border-bottom: 1px solid #d9d9d9;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .bottom .summary-box {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  height: 20px;
+  position: relative;
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .bottom .gantt-content {
+  padding: 16px 0;
+}
+.gantt-modal .ant-modal-body .gantt-wrapper .gantt-right .bottom .gantt-content:last-of-type {
+  padding-top: 16px;
+  padding-bottom: 0;
+}

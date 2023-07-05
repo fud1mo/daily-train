@@ -100,7 +100,12 @@ module.exports = function (proxy, allowedHost) {
       index: paths.publicUrlOrPath,
     },
     // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
-    proxy,
+    proxy: [{
+      context: ['/api'],
+      target: 'http://0.0.0.0:9572',
+      changeOrigin: true,
+      secure: false
+    }],
     onBeforeSetupMiddleware(devServer) {
       // Keep `evalSourceMapMiddleware`
       // middlewares before `redirectServedPath` otherwise will not have any effect
