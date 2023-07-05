@@ -16,8 +16,7 @@ const ellipsisStyle = {
 const GanttModal = ({ visible, record = {}, dispatch }) => {
 
   const { width } = useScreen();
-  const rightWidth = useMemo(() => width > 1440 ? width - 376 - width * 0.15 : width - 408, [width]);
-  const isMin = rightWidth > 1078;
+  const rightWidth = useMemo(() => width > 1440 ? 0.85 * width - 376 : width - 408, [width]);
 
   const { okr_proj_name } = record;
 
@@ -32,7 +31,6 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
       if (status) {
         rows.forEach(item => {
           if (item.milestone_start_time === item.milestone_end_time) {
-            item.real_date = item.milestone_end_time;
             item.milestone_end_time = moment(item.milestone_start_time).add(1, 'days').format("YYYY-MM-DD");
           }
           const beforeToday = +(moment(item.milestone_end_time)) - +(moment()) < 0;
@@ -54,7 +52,6 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
           // 把所有日期转换成当天0点的时间戳，并排序(用于56行获取整个项目的时间跨度)
           .sort((a, b) => moment(a).startOf('day').format('x') - moment(b).startOf('day').format('x'))
         rows.forEach(item => {
-          item.dates = [...new Set(...dates)];
           item.rangeDates = getRangeDates(dates[0], dates.slice(-1)[0]);
         });
         setDateList(rows);
@@ -79,8 +76,8 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
   const handleBackToday = () => {
     const today = document.getElementById("ganttRightWrapper");
     const list = ((dateList[0] || {}).rangeDates) || [];
-    let avW = isMin ? (rightWidth - 2) / (list.length - 1) : 1078 / (list.length - 1);
-    avW = avW > 10 ? avW : 10;
+    let avW = (rightWidth - 2) / (list.length - 1);  // 时间轴上每“天”的宽度
+    avW = avW > 10 ? avW : 10; // 限制最小宽度
     today.scrollTo({ left: list.indexOf(moment().format("YYYY-MM-DD")) * avW - +(today.style.width.replace('px', '')) / 2, behavior: 'smooth' });
   };
 
@@ -130,7 +127,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
             style={{
               left: (() => {
                 const list = ((dateList[0] || {}).rangeDates) || [];
-                let avW = isMin ? (rightWidth - 2) / (list.length - 1) : 1078 / (list.length - 1);
+                let avW = (rightWidth - 2) / (list.length - 1);
                 avW = avW > 10 ? avW : 10;
                 return list.indexOf(moment().format("YYYY-MM-DD")) * avW;
               })(),
@@ -153,7 +150,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                       }
                     });
                   });
-                  let avW = isMin ? (rightWidth - 2) / list.length : 1078 / list.length;
+                  let avW = (rightWidth - 2) / list.length;
                   avW = avW > 10 ? avW : 10;
                   return Object.keys(yearMonthMap).map(key => <li
                     style={{ width: avW * yearMonthMap[key].length, ...ellipsisStyle }}
@@ -166,7 +163,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                 (() => {
                   const list = ((dateList[0] || {}).rangeDates) || [];
                   const newList = getWeeks(list, 7);
-                  let avW = isMin ? (rightWidth - 2) / list.length : 1078 / list.length;
+                  let avW = (rightWidth - 2) / list.length ;
                   avW = avW > 10 ? avW : 10;
                   return newList.map((d, index) => <li style={{ width: avW * d.length, ...ellipsisStyle }} key={d} title={`${index + 1}周`}>{`${index + 1}周`}</li>);
                 })()
@@ -176,7 +173,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
           <div className="bottom">
             {
               [{ summaryList: dateList }, ...dateList].map(({
-                milestone_end_time, milestone_name, real_date, delay_date, going_date,
+                milestone_end_time, milestone_name, delay_date, going_date,
                 milestone_start_time, milestone_status, summaryList, rangeDates
               }, fIndex) => {
                 if (Array.isArray(summaryList)) {  // 第一行整体进度
@@ -184,9 +181,9 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                     {
                       summaryList.map(({
                         milestone_end_time, milestone_name, percent, delay_date, going_date,
-                        milestone_start_time, milestone_status, rangeDates, real_date
+                        milestone_start_time, milestone_status, rangeDates
                       }, index) => {
-                        let avW = isMin ? (rightWidth - 2) / (rangeDates.length - 1) : 1078 / (rangeDates.length - 1);
+                        let avW =  (rightWidth - 2) / (rangeDates.length - 1);
                         avW = avW > 10 ? avW : 10;
                         const leftW = index ? rangeDates.indexOf(milestone_start_time) * avW : 0;
                         return milestone_status === 1
@@ -237,7 +234,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                             >
                               {
                                 avW * (getRangeDates(milestone_start_time, delay_date).length - 1) >= 108
-                                  ? <span style={{ width: '100%', zoom: 0.7, verticalAlign: 3 }}>{`已延期${getRangeDates(real_date || milestone_end_time, delay_date).length - 1}天`}</span>
+                                  ? <span style={{ width: '100%', zoom: 0.7, verticalAlign: 3 }}>{`已延期${getRangeDates(milestone_end_time, delay_date).length - 1}天`}</span>
                                   : <span style={{ width: '100%', zoom: 0.7, verticalAlign: 3 }}>延</span>
                               }
                             </div>
@@ -287,7 +284,7 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                   </div>;
                 }
                 // 每个项目各自的进度
-                let avW = isMin ? (rightWidth - 2) / (rangeDates.length - 1) : 1078 / (rangeDates.length - 1);
+                let avW = (rightWidth - 2) / (rangeDates.length - 1) ;
                 avW = avW > 10 ? avW : 10;
                 const leftW = fIndex > 1 ? rangeDates.indexOf(milestone_start_time) * avW : 0;
                 const beforeToday = +(moment(milestone_end_time)) - +(moment()) <= 0;  // 是否是今天之前的项目
@@ -303,13 +300,13 @@ const GanttModal = ({ visible, record = {}, dispatch }) => {
                         </span>
                       </p>
                       <p>
-                        结束时间：{real_date || milestone_end_time}
+                        结束时间：{milestone_end_time}
                         <span>
                           {milestone_status === 1 && `(${(getRangeDates(going_date, milestone_end_time).length - 1)}天后完成)`}
                         </span>
                       </p>
                       {
-                        milestone_status === -1 && <p>已延期至：{moment().format("YYYY-MM-DD")}({`${getRangeDates(real_date || milestone_end_time, delay_date).length - 1}天`})</p>
+                        milestone_status === -1 && <p>已延期至：{moment().format("YYYY-MM-DD")}({`${getRangeDates(milestone_end_time, delay_date).length - 1}天`})</p>
                       }
                     </>}
                   >

@@ -14,7 +14,7 @@ exports.cgi = function (app, path, urlencodedParser) {
               {
                   milestone_name: '3_POC',
                   milestone_status: -1,
-                  milestone_start_time: '2023-06-26',
+                  milestone_start_time: '2023-06-25',
                   milestone_end_time: '2023-07-06',
               },
               {
